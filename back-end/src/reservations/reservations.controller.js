@@ -4,6 +4,37 @@
 const reservationsService = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
+async function reservationExists(req, res, next) {
+  const foundReservation = await reservationsService.read(req.params.reservation_id);
+    if (foundReservation) {
+    res.locals.reservation = foundReservation;
+    return next();
+  }
+  next({
+    status: 404,
+    message: `reservation id not found: ${req.params.reservation_id}`,
+  });
+};
+
+function hasReservationId(req,res,next) {
+  const reservation_Id = req.params.reservation_id || req.body?.data?.reservation_id;
+  if(reservation_Id){
+    res.locals.reservation_id = reservation_Id
+    return next()
+
+  }else{
+    next({
+      status: 404,
+      message: `reservation id not found: ${req.params.reservation_id}`,
+    });
+
+}
+}
+
+function read(req, res, next) {
+  res.status(200).json({ data: res.locals.reservation });
+};
+
 
 function hasData(req, res, next) {
   console.log("hasData: ",req.body.data);
@@ -59,6 +90,13 @@ function reservationDateIsValid(req, res, next) {
   return next();
 }
 
+async function update(req, res, next) {
+  const { reservation_id } = req.params;
+  // const { reservation_id } = req.body.da?ta;
+  
+  const data = await reservationsService.update(table_id, reservation_id);
+  res.json({ data });
+}
 
 function reservationTimeIsValid(req, res, next) {
   const { reservation_time } = req.body.data;
@@ -82,6 +120,8 @@ if (hours > 21 || (hours === 21 && minutes > 30)) {
 
    return next();
 }
+
+
 function peopleIsValid(req, res, next) {
   const { people } = req.body.data;
   console.log("peopleIsValid:", people);
@@ -120,10 +160,9 @@ async function list(req, res, next) {
 }
 
 module.exports = {
+  update: [hasReservationId, asyncErrorBoundary(reservationExists), asyncErrorBoundary(update)],
   list: asyncErrorBoundary(list),
-
+  read: [asyncErrorBoundary(reservationExists), read],
   create: [ hasData,firstAndLastNameAreValid,mobileNumberIsValid,reservationDateIsValid,reservationTimeIsValid, peopleIsValid, asyncErrorBoundary(create)],
 };
-
-
 

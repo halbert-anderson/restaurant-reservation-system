@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today, previous, next } from "../utils/date-time";
 import DateButtons from "./DateButtons";
@@ -15,8 +15,10 @@ function Dashboard({ date }) {
 
 const [reservations, setReservations] = useState([]);
 const [reservationsError, setReservationsError] = useState([]);
+const [tables, setTables] = useState([]);
+const [tablesError, setTablesError] = useState([]);
 
-function loadDashboard() {
+function loadReservationsToDashboard() {
   const abortController = new AbortController();
   setReservationsError([]);
   listReservations({ date }, abortController.signal)
@@ -29,21 +31,38 @@ function loadDashboard() {
   return () => abortController.abort();
 }
   
-  
-  useEffect(loadDashboard, [date]);
+function loadTablesToDashboard() {
+  const abortController = new AbortController();
+  setTablesError([]);
+  listTables( abortController.signal)
+    .then(setTables)
+    .catch((error) => {
+      console.log("Dashboard - talbesError: ", error);
+      setTablesError([error.message]);
+    });
+  return () => abortController.abort();
+}
+  useEffect(loadReservationsToDashboard, [date]);
+  useEffect(loadTablesToDashboard,[]);
 
-  const tableRows = reservations.length ? (
-    reservations.map((reservation) => (
-      <tr key={reservation.reservation_id}>
-        <th scope="row">{reservation.reservation_id}</th>
+  const tableRowsForReservations = reservations.length ? (
+    reservations.map((reservation) => {
+      const reservation_id = reservation.reservation_id;
+      return(
+      <tr key={reservation_id}>
+        <th scope="row">{reservation_id}</th>
         <td>{reservation.first_name}</td>
         <td>{reservation.last_name}</td>
         <td>{reservation.mobile_number}</td>
         <td>{reservation.reservation_date}</td>
         <td>{reservation.reservation_time}</td>
         <td>{reservation.people}</td>
+        <td><a href={`/reservations/${reservation_id}/seat`} className="seat-button">
+        Seat
+      </a></td>
       </tr>
-    ))
+    )})
+
   ) : (
     <tr>
       <td colSpan="7" className="text-center">
@@ -52,6 +71,15 @@ function loadDashboard() {
     </tr>
   );
 
+
+  const rowsForTables =  tables.map((table) => (
+      <tr key={table.table_id}>
+        <th scope="row">{table.table_id}</th>
+        <td>{table.table_name}</td>
+        <td>{table.capacity}</td>
+        <td>{table.reservation_id ? "Occupied" : "Free"}</td>
+      </tr>
+    ));
 
   return (
     <main>
@@ -65,6 +93,7 @@ function loadDashboard() {
             next={`/dashboard?date=${next(date)}`} 
       />
       <ErrorAlert errors={reservationsError} />
+      <h2>Reservations</h2>
       <table className="table">
         <thead>
           <tr>
@@ -75,12 +104,29 @@ function loadDashboard() {
             <th scope="col">Reservation Date</th>
             <th scope="col">Reservation Time</th>
             <th scope="col">People</th>
-          </tr>
+            <th scope="col">Seat</th>
+          </tr>          
         </thead>
         <tbody>
-           {tableRows}
+           {tableRowsForReservations}
         </tbody>
       </table>
+      <ErrorAlert  errors={tablesError} />
+      <h2>Tables</h2>
+      <table className="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Table Name</th>
+            <th scope="col">Capacity</th>
+            <th scope="col">Status</th>
+          </tr>    
+        </thead>
+        <tbody>
+            {rowsForTables}
+        </tbody>
+      </table>
+      
     </main>
   );
 }
