@@ -89,8 +89,10 @@ function ReservationsTable({ reservations }){//, setReservations, setErrorMessag
                 {reservationsForThisDate}
             </tbody>
         </table>
-  
+
   );
 
   }
+
+
 export default ReservationsTable;
