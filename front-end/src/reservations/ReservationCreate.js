@@ -18,23 +18,18 @@ function ReservationCreate() {
     const [reservation, setReservation] = useState({...initialReservationFormState});  
     const [reservationErrors, setReservationErrors] = useState(null);
     const history = useHistory();
-
-    // const {submitHandler, errors} = useSubmitHandler(createReservation, hasValidDateAndTime, onSuccess);
-    // const {submitHandler, errors} = useSubmitHandler(createReservation, onSuccess);
-    // setReservationErrors(errors);
     
+    // const onSuccess = (newReservation) => `/dashboard?date=${newReservation.reservation_date}`;
+    // const {submitHandler, errors} = useSubmitHandler(createReservation, hasValidDateAndTime, onSuccess);
+    // setReservationErrors(errors);
+    h
     async function submitHandler(event) {   
-        console.log("SUBMIT CALLED!");
+      
         event.preventDefault();
         const abortController = new AbortController();
         const validationError = hasValidDateAndTime(reservation);
-        console.log("ReservationCreate - validationError: ", validationError);
-        console.log("Reservation Data on Submit: ", reservation);
 
-        // if(Object.keys(validationError).length){
-        //    return setReservationErrors(validationError)
-        // }
-        if (validationError) {
+        if (Object.keys(validationError).length) {
             setReservationErrors(validationError); 
             abortController.abort();
             return;
@@ -45,14 +40,11 @@ function ReservationCreate() {
             history.push(`/dashboard?date=${newReservation.reservation_date}`);
         } catch (error) {
             console.error("createReservation error during form submission:", error);
-            // Create an error object with a message property
-            // const errorMessage = error.response?.data?.error || error.message || "Unknown error occurred.";
             setReservationErrors(error);
         } finally {
             abortController.abort();
         }
-        // }
-        // return () => abortController.abort();
+  
     };
   
     

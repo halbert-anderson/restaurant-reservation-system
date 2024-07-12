@@ -20,7 +20,7 @@ function useSubmitHandler(apiFunction, validationFunction = () => ({}), onSucces
 
     // Use the passed validation function 
     const validationError = validationFunction(formData);
-    if (validationError) {
+    if (Object.keys(validationError).length) {
       setErrors(validationError); 
       abortController.abort();
       return;
