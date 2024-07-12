@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationForm from "../forms/ReservationForm";
-import { hasValidDateAndTime } from "../validations/hasValidDateAndTime";
+// import { hasValidDateAndTime } from "../validations/hasValidDateAndTime";
 import { createReservation } from "../utils/api";
 
 // import useSubmitHandler from "../hooks/useSubmitHandler";
@@ -24,20 +24,25 @@ function ReservationCreate() {
     // const {submitHandler, errors} = useSubmitHandler(createReservation, hasValidDateAndTime, onSuccess);
     // const reservationErrors = errors; 
     
+    // async function submitHandler(event) {
 
-    async function submitHandler(event) {
+   const submitHandler = async (event) => {
+        console.log("SUBMIT CALLED!");
         event.preventDefault();
         const abortController = new AbortController();
         const validationError = hasValidDateAndTime(reservation);
- 
-        if (validationError) {
-            setReservationErrors(validationError); 
-            abortController.abort();
-            return;
+        console.log("ResCreate - validationError: ", validationError);
+        
+        if(Object.keys(validationError).length){
+           return setReservationErrors(validationError)
         }
+        // if (validationError) {
+        //     setReservationErrors(validationError); 
+        //     abortController.abort();
+        //     return;
+        // }
 
         try {
-            setReservationErrors(null);
             const newReservation = await createReservation(reservation, abortController.signal);
             history.push(`/dashboard?date=${newReservation.reservation_date}`);
         } catch (error) {
@@ -45,9 +50,11 @@ function ReservationCreate() {
             // Create an error object with a message property
             // const errorMessage = error.response?.data?.error || error.message || "Unknown error occurred.";
             setReservationErrors(error);
-        } finally {
-            abortController.abort();
+        // } finally {
+        //     abortController.abort();
+        // }
         }
+        return () => abortController.abort();
     };
   
     

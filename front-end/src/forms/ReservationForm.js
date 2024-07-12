@@ -2,15 +2,15 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 
 function ReservationForm({ reservation, changeHandler, submitHandler }) {
-
+console.log("ResForm - submitHandler: ", submitHandler);
     const history = useHistory();
 
     function cancelHandler() {
         history.goBack();
     } 
-    
+     //NOTE: when an arrow function vs function
 return (
-    <form onSubmit={submitHandler} className="form-group mb-4">
+    <form onSubmit={ submitHandler } className="form-group mb-4">
         <div className="row mb-3">
             <div className="col-6 form-group">
                 <label className="form-label" htmlFor="first_name">

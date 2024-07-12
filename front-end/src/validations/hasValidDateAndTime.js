@@ -15,10 +15,11 @@ export function hasValidDateAndTime(reservation) {
    const formattedDate = new Date(`${date}T${time}`);
    console.log("formattedDate", formattedDate);
    console.log("new Date()", new Date());
-   if (formattedDate <= new Date()) {
+   console.log("VALIDATION - formattedDate: ", formattedDate , " Date: ", Date() );
+   if (formattedDate <= new Date()) { // TO DO:check < or <=
        errorMessages.push("Reservation must be in the future.");
    }
-   
+   console.log("error: ", errorMessages);
    // No reservations before 10:30AM or after 9:30PM
    const hours = Number(time.split(":")[0]);
    const minutes = Number(time.split(":")[1]);
