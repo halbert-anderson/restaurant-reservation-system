@@ -82,3 +82,21 @@ export async function createReservation(reservation, signal) {
 console.log("api - createReservation - url: ", url, "options: ", options)
 return await fetchJson(url, options, reservation);
 }
+
+export async function createTable(table, signal) {
+  console.log("Table Creation - table: ", table);
+   const url = new URL(`${API_BASE_URL}/tables`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: table }),
+    signal,
+  };
+console.log("Table Creation - url: ", url, "options: ", options)
+return await fetchJson(url, options, table);
+}
+
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return await fetchJson(url, { headers, signal });
+}

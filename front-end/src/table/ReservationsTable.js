@@ -1,5 +1,5 @@
 import React from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import { updateStatus } from "../utils/api";
 
 function ReservationsTable({ reservations }){//, setReservations, setErrorMessages }) {
@@ -32,7 +32,7 @@ function ReservationsTable({ reservations }){//, setReservations, setErrorMessag
                 <th scope="col">Reservation Date</th>
                 <th scope="col">Reservation Time</th>
                 <th scope="col">People</th>
-                {/* <th scope="col">Status</th> */}
+                <th scope="col">Status</th>
             </tr>);
 
     const reservationsForThisDate = reservations.length ? (
@@ -45,6 +45,12 @@ function ReservationsTable({ reservations }){//, setReservations, setErrorMessag
                 <td>{reservation.reservation_date}</td>
                 <td>{reservation.reservation_time}</td>
                 <td>{reservation.people}</td>
+                <td>
+                    <Link to={`/reservations/${reservation.reservation_id}/seat`}
+                          className="btn btn-primary">
+                    Seat
+                    </Link>
+                </td>
                 {/* <td>{reservation.status}</td>
                 {reservation.status === "booked" && (
                     <>

@@ -1,3 +1,5 @@
+const hasProperties = require("../errors/hasProperties");
+
 const VALID_PROPERTIES = [
     "first_name",
     "last_name",

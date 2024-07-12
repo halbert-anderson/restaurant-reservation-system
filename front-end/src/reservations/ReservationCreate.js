@@ -22,7 +22,7 @@ function ReservationCreate() {
     // const onSuccess = (newReservation) => `/dashboard?date=${newReservation.reservation_date}`;
     // const {submitHandler, errors} = useSubmitHandler(createReservation, hasValidDateAndTime, onSuccess);
     // setReservationErrors(errors);
-    h
+    
     async function submitHandler(event) {   
       
         event.preventDefault();
@@ -59,7 +59,7 @@ function ReservationCreate() {
 
 
 
-    return( 
+    return ( 
         <div>
           <h2 className="mb-3">Create Reservation</h2>
           <ErrorAlert error={reservationErrors} /> 
