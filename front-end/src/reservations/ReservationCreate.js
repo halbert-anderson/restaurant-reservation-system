@@ -31,7 +31,6 @@ function ReservationCreate() {
 
         if (Object.keys(validationError).length) {
             setReservationErrors(validationError); 
-            abortController.abort();
             return;
         }
 

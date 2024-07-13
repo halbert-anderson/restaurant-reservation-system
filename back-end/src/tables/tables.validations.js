@@ -48,23 +48,24 @@ function hasData(req, res, next) {
   next({ status: 400, message: "body must have data property" })
 }
 
+function hasValidSeatRequest(req, res, next) {
+    const { data = {} } = req.body;
 
-async function tableExists(req, res ,next){
-   const { table_id } = req.params;
-   const table = await tablesService.read( table_id );
-   if (table) {
-    res.locals.table = table;
-    return next();
-   }
-   next({ status: 404,
-          message: `Table ${table_id} cannot be found.`
-        });
+  if (!data.reservation_id) {
+    return next({
+      status: 400,
+      message: 'reservation_id is missing',
+    });
+  }
+
+  next();
 }
+
 
 module.exports = {
     hasData,
-    tableExists,
     hasOnlyValidProperties,
     hasRequiredProperties, 
     hasValidTableName, 
-    hasValidCapacity};
+    hasValidCapacity,
+    hasValidSeatRequest};

@@ -7,7 +7,7 @@ const VALID_PROPERTIES = [
     "reservation_date",
     "reservation_time",
     "people",
-    // "status",
+    "status",
     // "reservation_id",
     // "created_at",
     // "updated_at",
@@ -55,18 +55,6 @@ const VALID_PROPERTIES = [
   }
 
 
-async function reservationExists(req, res, next) {
-    const {reservation_id}= req.params;
-    const foundReservation = await reservationsService.read(reservation_id);
-      if (foundReservation) {
-      res.locals.reservation = foundReservation;
-      return next();
-    }
-    return next({ status: 404,
-                  message: `reservation_id ${reservation_id} cannot be found: `,});
-};
-
-
 function hasData(req, res, next) {
     console.log("hasData: ",req.body.data);
     if (req.body.data) {
@@ -88,6 +76,9 @@ function hasReservationId(req,res,next) {
       });
     }
 }
+
+
+
 
 
 function hasValidFirstAndLastName(req, res, next) {
@@ -147,34 +138,31 @@ function hasValidDate(req, res, next) {
 }
 
 
+
 function hasValidTime(req, res, next) {
     const { reservation_time } = req.body.data;
-    const regTime = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-
-    // const regTime = /^(\d{1,2}):(\d{2})(:00)?([ap]m)?$/;
-    // const regTime = /^\d{2}:\d{2}$/;
-    // const regTime = /[0-9]{2}:[0-9]{2}/;
-    // console.log("ReservationTimeIsValid:", reservation_time);
-    if(!regTime.test(reservation_time)){
-      next({ status: 400, 
-             message: "Must include valid reservation_time (ex. hh:mm:[ap]m)." })
+    const regTime = /^(?:[01]\d|2[0-3]):[0-5]\d$/; 
+      
+    if (!regTime.test(reservation_time)) {
+         return next({ status: 400, 
+                       message: "Must include valid reservation_time (ex. HH:mm for 24-hour format)." });
     }
   
-    // No reservations before 10:30AM or after 9:30PM
-    const hours = Number(reservation_time.split(":")[0]);
-    const minutes = Number(reservation_time.split(":")[1]);
+    const [hours, minutes] = reservation_time.split(':').map(Number);
+  
     if (hours < 10 || (hours === 10 && minutes < 30)) {
-        return next({status: 400, 
-                     message: "Reservation must be after 10:30AM." });
+         return next({ status: 400, 
+                       message: "Reservation must be after 10:30AM." });
     }    
-
-    if (hours > 21 || (hours === 21 && minutes > 30)) {
-        return next({status: 400, 
-                     message: "Reservation must be before 9:30PM." });
-    }
   
+    if (hours > 21 || (hours === 21 && minutes > 30)) {
+         return next({ status: 400, 
+                       message: "Reservation must be before 9:30PM." });
+    }
+    
     return next();
 }
+  
 
 
 function hasValidPeople(req, res, next) {
@@ -198,7 +186,7 @@ function hasValidPeople(req, res, next) {
 }
 
 
-function statusIsValid(req, res, next) {
+function hasValidStatus(req, res, next) {
     const { status } = req.body.data;
     const currentStatus = res.locals.reservation.status;
     if( currentStatus === "finished" || currentStatus ==="cancelled") {
@@ -229,7 +217,6 @@ function isBooked(req, res, next) {
 module.exports = {
     hasOnlyValidProperties,
     hasRequiredProperties,
-    reservationExists,
     hasData,
     hasReservationId,
     hasValidFirstAndLastName,
@@ -237,6 +224,6 @@ module.exports = {
     hasValidDate,
     hasValidTime,
     hasValidPeople,
-    statusIsValid,
+    hasValidStatus,
     isBooked,
 };
