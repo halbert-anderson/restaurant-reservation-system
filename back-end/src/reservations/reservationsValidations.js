@@ -195,12 +195,12 @@ function hasValidStatus(req, res, next) {
                    message: `Reservation status is finished.`
                  });
     }
-    if (["booked", "seated", "finished", "canceled"].includes(status)) {
+    if (["booked", "seated", "finished", "cancelled"].includes(status)) {
         res.locals.status = status;
         return next();
     }
     return next({ status: 400,
-                  message: `Status is not valid; ${status0}`
+                  message: `Status is not valid; ${status}`
     });
 }
 

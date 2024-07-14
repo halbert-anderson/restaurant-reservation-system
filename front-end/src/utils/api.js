@@ -129,3 +129,14 @@ export async function freeTable(tableId, signal) {
   };
   return await fetchJson(url, options);
 }
+
+export async function  updateStatus(reservation_id, status, signal){
+  const url =  new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+  const options = {
+    method: "PUT",
+    body: JSON.stringify({ data: { status } }),
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options);
+}

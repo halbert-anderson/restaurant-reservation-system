@@ -76,6 +76,7 @@ module.exports = {
             hasValidDate,
             hasValidTime,
             hasValidPeople,
+            isBooked,
             asyncErrorBoundary(create)],
   updateStatus: [asyncErrorBoundary(reservationExists),
                  hasReservationId,

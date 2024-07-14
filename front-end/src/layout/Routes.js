@@ -49,9 +49,6 @@ function Routes() {
          <TableCreate />
       </Route>
 
-      {/* <Route exact={true} path="/tables/:table_id/seat">
-      
-      </Route> */}
       <Route>
         <NotFound />
       </Route>

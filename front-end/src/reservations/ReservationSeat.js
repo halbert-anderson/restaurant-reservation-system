@@ -17,6 +17,7 @@ function ReservationSeat() {
         async function loadTables() {
             setLoading(true);
             setSeatReservationErrors(null);
+            setTables([])
             try {
                 const tablesList = await listTables(abortController.signal);
                 setTables(tablesList);

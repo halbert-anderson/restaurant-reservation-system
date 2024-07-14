@@ -1,21 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { updateStatus } from "../utils/api";
+import { listReservations, updateStatus } from "../utils/api";
 
-function ReservationsTable({ reservations }){//, setReservations, setErrorMessages }) {
-    // async function updateStatusHandler(reservation_id, status) {
-    //   const abortController = new AbortController();
-    //   try {
-    //     await updateStatus(reservation_id, status, abortController.signal);
-    //     // Update the local state to reflect changes
-    //     const updatedReservations = reservations.map(reservation =>
-    //       reservation.reservation_id === reservation_id ? { ...reservation, status } : reservation
-    //     );
-    //     setReservations(updatedReservations);
-    //   } catch (error) {
-    //     setErrorMessages(previousErrorMessages => [...previousErrorMessages, error.message]);
-    //   }
-    // }
+function ReservationsTable({ reservations , setReservations, setReservationsError }) {
+    async function updateStatusHandler(reservation_id, status) {
+      const abortController = new AbortController();
+      try {
+        await updateStatus(reservation_id, status, abortController.signal);
+        // Update the local state to reflect changes
+        const updatedReservations = await listReservations();
+        setReservations(updatedReservations);
+      } catch (error) {
+        setReservationsError(error);
+      }
+    }
 
     // const finishReservationHandler = async (reservation_id) => {
     //     if (window.confirm("Do you want to cancel this reservation?")) {
@@ -45,27 +43,28 @@ function ReservationsTable({ reservations }){//, setReservations, setErrorMessag
                 <td>{reservation.reservation_date}</td>
                 <td>{reservation.reservation_time}</td>
                 <td>{reservation.people}</td>
-                <td>
-                    <Link to={`/reservations/${reservation.reservation_id}/seat`}
-                          className="btn btn-primary">
+                <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
+                
+               
+                {reservation.status === "booked" && ( <td>
+                    <button  className="btn btn-secondary mr-2"       
+                             type="button" 
+                             onClick={()=>updateStatusHandler(reservation.reservation_id,"seated")}>
                     Seat
-                    </Link>
-                </td>
-                {/* <td>{reservation.status}</td>
-                {reservation.status === "booked" && (
-                    <>
+                    </button>
+                            {/* <Link to={`/reservations/${reservation.reservation_id}/seat`}
+                                  className="btn btn-primary">
+                                Seat
+                            </Link> */}
+                        </td>)}
+                    {/* <>
                         <td>
                             <Link to={`/reservations/${reservation.reservation_id}/edit`}
                                   className="btn btn-secondary">
-                                Edit
+                                Edit 
                             </Link>
                         </td>
-                        <td>
-                            <Link to={`/reservations/${reservation.reservation_id}/seat`}
-                                  className="btn btn-primary">
-                                Seat
-                            </Link>
-                        </td>
+                       
                         <td>
                             <button type="button"
                                     className="btn btn-danger"
@@ -73,8 +72,8 @@ function ReservationsTable({ reservations }){//, setReservations, setErrorMessag
                                 Cancel
                             </button>
                         </td>
-                    </>
-                )} */}
+                    </> */}
+                 
             </tr>
         ))
     ) : (
