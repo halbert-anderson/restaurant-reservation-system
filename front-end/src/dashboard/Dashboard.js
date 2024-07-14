@@ -61,7 +61,7 @@ function Dashboard({ date }) {
       <ErrorAlert error={reservationsError} />
       <DisplayReservations reservations={reservations} />
       <ErrorAlert error={tablesError} />
-      <DisplayTables tables={tables} />
+      <DisplayTables tables={tables} setTables={setTables} setTablesError={setTablesError} />
     </main>
   );
 }

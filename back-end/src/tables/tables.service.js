@@ -42,19 +42,20 @@ async function clearTable(table_id) {
 
         await transaction("tables")
             .where({ table_id })
-            .update({ reservation_id: null, occupied: false });  // Assuming 'occupied' is the correct field name
+            .update({ reservation_id: null, occupied: false }); 
 
         await transaction("reservations")
             .where({ reservation_id: table.reservation_id })
             .update({ status: "finished" });
 
         await transaction.commit();
-        return read(table_id);  // You might need to consider transaction consistency for read operation
+        return read(table_id); 
     } catch (error) {
         await transaction.rollback();
         throw error;
     }    
 }
+
 
 
 module.exports = { create, 
