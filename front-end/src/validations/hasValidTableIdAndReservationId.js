@@ -1,15 +1,17 @@
 export function hasValidTableIdAndReservationId({table_id, reservation_id} ) {
-    const errors = {};
+    const errorMessages = [];
 
     if (!table_id) {
         console.error("Validation error: Missing table ID");
-        errors.table_id = "Validation error: Missing table ID.";
+        errorMessages.push("Validation error: Missing table ID.");
     }
 
     if (!reservation_id) {
         console.error("Validation error: Missing reservation ID.");
-        errors.reservation_id = "Validation error: Missing reservation ID.";
+        errorMessages.push("Validation error: Missing reservation ID.");
     }
 
-    return Object.keys(errors).length === 0 ? null : errors;
+    if (errorMessages.length > 0) {
+        return { message: errorMessages.join(" ") }; // Joins messages with a space
+    }
 }

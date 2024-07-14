@@ -85,7 +85,7 @@ return await fetchJson(url, options, reservation);
 
 export async function createTable(table, signal) {
   console.log("Table Creation - table: ", table);
-   const url = new URL(`${API_BASE_URL}/tables`);
+  const url = new URL(`${API_BASE_URL}/tables`);
   const options = {
     method: "POST",
     headers,
@@ -93,12 +93,16 @@ export async function createTable(table, signal) {
     signal,
   };
 console.log("Table Creation - url: ", url, "options: ", options)
-return await fetchJson(url, options, table);
+const response = await fetchJson(url, options, table);
+console.log("createTable in api - response: ",response);
+return response;
+// return await fetchJson(url, options, table);
 }
 
 export async function listTables(signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
-  return await fetchJson(url, { headers, signal });
+    console.log("listTables - url: ", url, { headers, signal }  );
+  return await fetchJson(url, { signal });
 }
 
 export async function seatReservation(table_id, reservation_id, signal) {

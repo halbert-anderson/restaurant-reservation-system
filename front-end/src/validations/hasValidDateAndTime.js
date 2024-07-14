@@ -35,5 +35,5 @@ export function hasValidDateAndTime(reservation) {
    if (errorMessages.length > 0) {
        return { message: errorMessages.join(" ") }; // Joins messages with a space
    }
-   return {}; // No errors
+   return null; // No errors
 }

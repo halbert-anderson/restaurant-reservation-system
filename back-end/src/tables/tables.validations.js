@@ -25,7 +25,8 @@ function hasOnlyValidProperties(req, res, next) {
 function hasValidTableName(req, res, next) {
   const{ table_name } = req.body.data;
     if (table_name.length < 2 ) {
-      return next({ status: 400, message: "table_name must be at least 2 characters long" });
+      return next({ status: 400, 
+                    message: "table_name must be at least 2 characters long" });
     }
     next();
 }
@@ -34,7 +35,8 @@ function hasValidTableName(req, res, next) {
 function hasValidCapacity(req, res, next) {
   const { capacity } = req.body.data;
   if ( !Number.isInteger(capacity) || capacity < 1) {
-    return next({ status: 400, message: "capacity must be at least 1 person and a number" });
+    return next({ status: 400, 
+                  message: "capacity must be at least 1 person and a number" });
   }
   next();
 }
@@ -45,7 +47,8 @@ function hasData(req, res, next) {
   if (req.body.data) {
     return next()
   }
-  next({ status: 400, message: "body must have data property" })
+  next({ status: 400, 
+         message: "body must have data property" })
 }
 
 function hasValidSeatRequest(req, res, next) {

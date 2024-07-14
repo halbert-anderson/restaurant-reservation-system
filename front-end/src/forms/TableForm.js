@@ -40,7 +40,7 @@ return (
                    id="capacity"
                    name="capacity"
                    type="number"
-                   min= {1}
+                   min= {2}
                    value={table.capacity}
                    onChange={changeHandler}
                    required={true}

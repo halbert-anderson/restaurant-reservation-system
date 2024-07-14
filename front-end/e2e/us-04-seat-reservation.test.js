@@ -36,27 +36,32 @@ describe("US-04 - Seat reservation - E2E", () => {
     });
 
     test("filling and submitting form creates a new table", async () => {
+      console.log("point1");
       const tableName = `#${Date.now().toString(10)}`;
-
+      console.log("point2 - tableName: ",tableName);
       await page.type("input[name=table_name]", tableName);
       await page.type("input[name=capacity]", "6");
+      console.log("point3 ");
 
       await page.screenshot({
         path: ".screenshots/us-04-create-table-submit-before.png",
         fullPage: true,
       });
+      console.log("point4");
 
       await Promise.all([
         page.click("button[type=submit]"),
         page.waitForNavigation({ waitUntil: "networkidle0" }),
       ]);
+      console.log("point5");
 
       await page.screenshot({
         path: ".screenshots/us-04-create-table-submit-after.png",
         fullPage: true,
       });
-
+      console.log("point6");
       await expect(page).toMatch(tableName);
+      console.log("point7");
     });
     test("omitting table_name and submitting does not create a new table", async () => {
       await page.type("input[name=capacity]", "3");

@@ -32,12 +32,13 @@ function TableCreate() {
         } catch (error) {
             console.error("createTable error during form submission:", error);
             setTableErrors(error);
-        } finally {
+        } 
+        finally {
             abortController.abort();
         }
   
     }
-
+    
     function changeHandler(event) {
         const { name, value } = event.target;
         setTable((previousTable) => ({
@@ -50,7 +51,7 @@ function TableCreate() {
 return (
     <div>
         <h3 className="mb-3">Table Assignment</h3>
-        <ErrorAlert errors={tableErrors} />
+        <ErrorAlert error={tableErrors} />
         <TableForm table={table} changeHandler={changeHandler} submitHandler={submitHandler} />     
     </div>
   );

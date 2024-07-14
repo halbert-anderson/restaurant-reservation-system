@@ -98,7 +98,7 @@ async function updateSeat(req, res, next) {
   
 module.exports = {
     create: [hasData,
-             //hasOnlyValidProperties,
+            // hasOnlyValidProperties,
              hasRequiredProperties, 
              hasValidTableName, 
              hasValidCapacity, 

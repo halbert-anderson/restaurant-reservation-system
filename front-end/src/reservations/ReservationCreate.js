@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationForm from "../forms/ReservationForm";
-import { hasValidDateAndTime } from "../validations/hasValidDateAndTime";
 import { createReservation } from "../utils/api";
 // import useSubmitHandler from "../hooks/useSubmitHandler";
 
@@ -26,13 +25,7 @@ function ReservationCreate() {
     async function submitHandler(event) {   
       
         event.preventDefault();
-        const abortController = new AbortController();
-        const validationError = hasValidDateAndTime(reservation);
-
-        if (Object.keys(validationError).length) {
-            setReservationErrors(validationError); 
-            return;
-        }
+        const abortController = new AbortController(); 
 
         try {
             const newReservation = await createReservation(reservation, abortController.signal);

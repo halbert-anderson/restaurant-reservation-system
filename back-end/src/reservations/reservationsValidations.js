@@ -142,7 +142,8 @@ function hasValidDate(req, res, next) {
 function hasValidTime(req, res, next) {
     const { reservation_time } = req.body.data;
     const regTime = /^(?:[01]\d|2[0-3]):[0-5]\d$/; 
-      
+    console.log("hasValidTime: ",reservation_time);
+
     if (!regTime.test(reservation_time)) {
          return next({ status: 400, 
                        message: "Must include valid reservation_time (ex. HH:mm for 24-hour format)." });
