@@ -40,6 +40,7 @@ describe("US-08 - Change an existing reservation", () => {
     });
 
     test("updates the reservation", async () => {
+      console.log("point 1");
       const data = {
         first_name: "Mouse",
         last_name: "Whale",
@@ -48,22 +49,23 @@ describe("US-08 - Change an existing reservation", () => {
         reservation_time: "18:00",
         people: 2,
       };
-
+      console.log("point 2")
       const reservation = await knex("reservations")
         .where("reservation_id", 1)
         .first();
-
+        console.log("point 3 -reservation: ", reservation);
       expect(reservation).not.toBeUndefined();
+      console.log("point 4")
 
       Object.entries(data).forEach(
         ([key, value]) => (reservation[key] = value)
       );
-
+      console.log("point 5 -data: ",data);
       const response = await request(app)
         .put("/reservations/1")
         .set("Accept", "application/json")
         .send({ data: reservation });
-
+        console.log("point 6 -response: ",response);
       expect(response.body.error).toBeUndefined();
       expect(response.body.data).toEqual(
         expect.objectContaining({

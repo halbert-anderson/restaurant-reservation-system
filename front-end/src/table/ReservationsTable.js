@@ -15,11 +15,11 @@ function ReservationsTable({ reservations , setReservations, setReservationsErro
       }
     }
 
-    // const finishReservationHandler = async (reservation_id) => {
-    //     if (window.confirm("Do you want to cancel this reservation?")) {
-    //       await updateStatusHandler(reservation_id, "finished");
-    //     }
-    //   };
+    const finishReservationHandler = async (reservation_id) => {
+        if (window.confirm("Do you want to cancel this reservation?")) {
+          await updateStatusHandler(reservation_id, "cancelled");
+        }
+      };
 
     const columnHeadingsForReservationTable = ( 
             <tr>
@@ -43,37 +43,30 @@ function ReservationsTable({ reservations , setReservations, setReservationsErro
                 <td>{reservation.reservation_date}</td>
                 <td>{reservation.reservation_time}</td>
                 <td>{reservation.people}</td>
-                <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
-                
-               
-                {reservation.status === "booked" && ( <td>
-                    <button  className="btn btn-secondary mr-2"       
-                             type="button" 
-                             onClick={()=>updateStatusHandler(reservation.reservation_id,"seated")}>
-                    Seat
+                <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>   
+                {reservation.status === "booked" && ( 
+                <td>
+                    <button className="btn btn-primary mr-2"       
+                            type="button" 
+                            onClick={()=>updateStatusHandler(reservation.reservation_id,"seated")}
+                    >Seat
                     </button>
-                            {/* <Link to={`/reservations/${reservation.reservation_id}/seat`}
-                                  className="btn btn-primary">
-                                Seat
-                            </Link> */}
-                        </td>)}
-                    {/* <>
-                        <td>
-                            <Link to={`/reservations/${reservation.reservation_id}/edit`}
-                                  className="btn btn-secondary">
-                                Edit 
-                            </Link>
-                        </td>
-                       
-                        <td>
-                            <button type="button"
-                                    className="btn btn-danger"
-                                    onClick={() => finishReservationHandler(reservation.reservation_id)}>
-                                Cancel
-                            </button>
-                        </td>
-                    </> */}
-                 
+                </td>
+                <td>
+                    <Link className="btn btn-secondary"
+                          to={`/reservations/${reservation.reservation_id}/edit`}
+                    >Edit 
+                    </Link>
+                 </td>
+                 <td>
+                    <button className="btn btn-danger"
+                            type="button"
+                            data-reservation-id-cancel={reservation.reservation_id}
+                            onClick={() => finishReservationHandler(reservation.reservation_id)}
+                    >Cancel
+                     </button>
+                </td>)}
+                               
             </tr>
         ))
     ) : (

@@ -83,6 +83,29 @@ console.log("api - createReservation - url: ", url, "options: ", options)
 return await fetchJson(url, options, reservation);
 }
 
+export async function readReservation(reservation_id,signal) {
+  const url = new URL (`${API_BASE_URL}/reservations/${reservation_id}`);
+  return await fetchJson(url,{headers, signal }, [])
+   .then(formatReservationDate)
+   .then(formatReservationTime);;
+ }
+ 
+export async function updateReservation(reservation, signal) {
+  console.log("api - updateReservation: ", reservation)
+  const { reservation_id } = reservation;
+  const url = new URL (`${API_BASE_URL}/reservations/${reservation_id}`);
+  // Object.entries(params).forEach(([key, value]) => 
+  //   url.searchParams.append(key, value.toString()));
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { ...reservation } }),
+    signal,
+  };
+console.log("api - updateReservation - url: ", url, "options: ", options)
+return await fetchJson(url, options, reservation);
+}
+
 export async function createTable(table, signal) {
   console.log("Table Creation - table: ", table);
   const url = new URL(`${API_BASE_URL}/tables`);

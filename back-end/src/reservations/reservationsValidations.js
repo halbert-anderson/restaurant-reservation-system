@@ -8,9 +8,9 @@ const VALID_PROPERTIES = [
     "reservation_time",
     "people",
     "status",
-    // "reservation_id",
-    // "created_at",
-    // "updated_at",
+    "reservation_id",
+    "created_at",
+    "updated_at",
   ];
   
 
@@ -102,8 +102,9 @@ function hasValidFirstAndLastName(req, res, next) {
 function hasValidMobileNumber(req, res, next) {
     const { mobile_number } = req.body.data;
     const regMobileNum = /^\d{3}-\d{3}-\d{4}$/
+    const regMobileNum2 = /^\d{10}$/;
     console.log("mobileNumberIsValid: ", mobile_number);
-    if(!regMobileNum.test(mobile_number)){
+    if(!regMobileNum.test(mobile_number) && !regMobileNum2.test(mobile_number)){
       next({ status: 400, 
              message: "Must include valid mobile_number (ex. ddd-ddd-dddd)." })
     }

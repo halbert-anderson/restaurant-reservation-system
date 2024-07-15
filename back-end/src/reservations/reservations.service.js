@@ -22,6 +22,14 @@ function read(reservation_id) {
           .first();
 }
 
+function update(updatedReservation) {
+  return knex("reservations")
+    .where({ reservation_id: updatedReservation.reservation_id })
+    .update(updatedReservation)
+    .returning("*")  // This ensures all fields of the updated record are returned
+    .then((updatedRecords) => updatedRecords[0]);  // Returns the first record from the result
+}
+
 function updateStatus(reservation_id, status) {
   return knex("reservations")
     .select("*")
@@ -42,5 +50,5 @@ function search(mobile_number) {
 }
 
 module.exports = {
-  list, create, read, updateStatus, search
+  list, create, read, update, updateStatus, search
 };

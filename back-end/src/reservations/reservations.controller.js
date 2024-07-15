@@ -38,12 +38,6 @@ async function create(req, res) {
 
 async function list(req, res) {
   
-  // const  { date  } = req.query;
-  // const data = await reservationsService.list(date);
-                        
-  // // console.log("req.query: ", req.query);
-  // //const date = req.query.date
-  // console.log("Date: ", date);
   const  { date, mobile_number } = req.query;
   const data = await (date? reservationsService.list(date)
                          : reservationsService.search(mobile_number));
@@ -56,6 +50,20 @@ async function read(req, res) {
   res.json({ data });
 }
 
+async function update(req, res, next) {
+  try{
+    const reservation = req.body.data;
+    const reservation_Id = res.locals.reservation.reservation_id;
+    const updatedReservation = {...reservation, 
+                                reservation_id: reservation_Id};
+  
+    const data = await reservationsService.update(updatedReservation);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+}
 
 async function updateStatus(req, res) {
   const { status } = res.locals;
@@ -63,6 +71,8 @@ async function updateStatus(req, res) {
   const data = await reservationsService.updateStatus(reservation_id, status);
   res.status(200).json({ data });
 }
+
+
 
 module.exports = {
   list: asyncErrorBoundary(list),
@@ -78,6 +88,18 @@ module.exports = {
             hasValidPeople,
             isBooked,
             asyncErrorBoundary(create)],
+  update: [ hasData,
+            asyncErrorBoundary(reservationExists),
+            hasOnlyValidProperties,
+            hasRequiredProperties,
+            hasValidFirstAndLastName,
+            hasValidMobileNumber,
+            hasValidDate,
+            hasValidTime, 
+            hasValidPeople, 
+            hasReservationId, 
+            hasValidStatus,
+            asyncErrorBoundary(update)],
   updateStatus: [asyncErrorBoundary(reservationExists),
                  hasReservationId,
                  hasValidStatus,
