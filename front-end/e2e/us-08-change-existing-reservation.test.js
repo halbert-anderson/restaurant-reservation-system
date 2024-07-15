@@ -52,20 +52,21 @@ describe("US-08 - Change an existing reservation - E2E", () => {
 
     describe("reservation edit link", () => {
       test("goes to the /reservations/:reservation_id/edit page", async () => {
+        console.log("point 1");
         await page.screenshot({
           path: ".screenshots/us-08-dashboard-edit-click-before.png",
           fullPage: true,
         });
-
+        console.log("point 2");
         const hrefSelector = `[href="/reservations/${reservation.reservation_id}/edit"]`;
         await page.waitForSelector(hrefSelector);
-
+        console.log("point 3 hrefSelector: ", hrefSelector);
         await page.screenshot({
           path:
             ".screenshots/us-08-dashboard-edit-click-after-no-change-expected.png",
           fullPage: true,
         });
-
+        console.log("point 4")
         expect(await page.$(hrefSelector)).toBeDefined();
       });
     });

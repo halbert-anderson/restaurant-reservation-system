@@ -4,6 +4,7 @@ import { today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 import ReservationCreate from "../reservations/ReservationCreate";
 import ReservationSeat from "../reservations/ReservationSeat";
+import ReservationEdit from "../reservations/ReservationEdit";
 import Dashboard from "../dashboard/Dashboard";
 import TableCreate from "../tables/TableCreate";
 import Search from "../search/Search";

@@ -1,8 +1,11 @@
 import React from "react";
-// import { Link } from "react-router-dom";
+import { Link , useHistory } from "react-router-dom";
 import { listReservations, updateStatus } from "../utils/api";
 
 function ReservationsTable({ reservations , setReservations, setReservationsError }) {
+    
+    const history = useHistory();
+
     async function updateStatusHandler(reservation_id, status) {
       const abortController = new AbortController();
       try {
@@ -17,9 +20,15 @@ function ReservationsTable({ reservations , setReservations, setReservationsErro
 
     const finishReservationHandler = async (reservation_id) => {
         if (window.confirm("Do you want to cancel this reservation?")) {
-          await updateStatusHandler(reservation_id, "cancelled");
-        }
+            try {
+                await updateStatusHandler(reservation_id, "cancelled");
+                history.go(0);
+            }
+            catch(error) {
+                setReservationsError(error);
+            }
       };
+    }
 
     const columnHeadingsForReservationTable = ( 
             <tr>
@@ -45,27 +54,34 @@ function ReservationsTable({ reservations , setReservations, setReservationsErro
                 <td>{reservation.people}</td>
                 <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>   
                 {reservation.status === "booked" && ( 
-                <td>
-                    <button className="btn btn-primary mr-2"       
-                            type="button" 
-                            onClick={()=>updateStatusHandler(reservation.reservation_id,"seated")}
-                    >Seat
-                    </button>
-                </td>
-                <td>
-                    <Link className="btn btn-secondary"
-                          to={`/reservations/${reservation.reservation_id}/edit`}
-                    >Edit 
-                    </Link>
-                 </td>
-                 <td>
-                    <button className="btn btn-danger"
-                            type="button"
-                            data-reservation-id-cancel={reservation.reservation_id}
-                            onClick={() => finishReservationHandler(reservation.reservation_id)}
-                    >Cancel
-                     </button>
-                </td>)}
+                <>  
+                    <td>
+                        <Link className='btn btn-primary'
+                              to={`/reservations/${reservation.reservation_id}/seat`}
+              
+                        >Seat
+                        </Link>
+                        {/* <button className="btn btn-primary mr-2"       
+                                type="button" 
+                                onClick={()=>updateStatusHandler(reservation.reservation_id,"seated")}
+                        >Seat
+                        </button> */}
+                    </td>
+                    <td>
+                        <Link className="btn btn-secondary"
+                              to={`/reservations/${reservation.reservation_id}/edit`}
+                        >Edit 
+                        </Link>
+                    </td>
+                    <td>
+                        <button className="btn btn-danger"
+                                type="button"
+                                data-reservation-id-cancel={reservation.reservation_id}
+                                onClick={() => finishReservationHandler(reservation.reservation_id)}
+                        >Cancel
+                        </button>
+                    </td>
+                </>      )}
                                
             </tr>
         ))

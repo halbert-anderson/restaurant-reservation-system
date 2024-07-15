@@ -21,7 +21,7 @@ return (
                        name="first_name"
                        type="text"
                        placeholder="First Name"
-                    //    autoFocus
+                       autoFocus
                     //    pattern="^[a-zA-Z0-9'-. ]+$"
                        value={reservation.first_name}
                        onChange={changeHandler}
