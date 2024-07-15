@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { listReservations, updateStatus } from "../utils/api";
 
 function ReservationsTable({ reservations , setReservations, setReservationsError }) {

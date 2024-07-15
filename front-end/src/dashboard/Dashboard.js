@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import { listReservations, listTables, freeTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today, previous, next } from "../utils/date-time";
 import DateButtons from "./DateButtons";
@@ -46,6 +46,22 @@ function Dashboard({ date }) {
     };
   }, [date]);
 
+  async function finishHandler(table_id) {
+    if (window.confirm('Is this table ready to seat new guests? This cannot be undone.')) {
+        const abortController = new AbortController();
+        try {
+          await freeTable(table_id, abortController.signal);
+          // Updates the UI by setting tables with most recent tables list
+          const updatedTables = await listTables(abortController.signal);
+          setTables(updatedTables);
+          const reservationList = await listReservations({ date }, abortController.signal);
+          setReservations(reservationList);
+        } 
+        catch (error) {
+          setTablesError(error);
+        }
+    }
+  }
   return (
     <main>
       <h1>Dashboard</h1>
@@ -61,7 +77,7 @@ function Dashboard({ date }) {
       <ErrorAlert error={reservationsError} />
       <DisplayReservations reservations={reservations} setReservations={setReservations} setReservationsError={setReservationsError} />
       <ErrorAlert error={tablesError} />
-      <DisplayTables tables={tables} setTables={setTables} setTablesError={setTablesError} />
+      <DisplayTables tables={tables} finishHandler={finishHandler} />
     </main>
   );
 }
