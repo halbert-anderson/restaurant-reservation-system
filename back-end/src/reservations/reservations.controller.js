@@ -38,16 +38,16 @@ async function create(req, res) {
 
 async function list(req, res) {
   
-  const  { date  } = req.query;
-  const data = await reservationsService.list(date);
+  // const  { date  } = req.query;
+  // const data = await reservationsService.list(date);
                         
-  // console.log("req.query: ", req.query);
-  //const date = req.query.date
+  // // console.log("req.query: ", req.query);
+  // //const date = req.query.date
   // console.log("Date: ", date);
-  // const  { date ,mobile_number } = req.query;
-  // const data = await (date? reservationsService.list(date)
-  //                        : reservationsService.search(mobile_number));
-  // console.log("data: ",data);
+  const  { date, mobile_number } = req.query;
+  const data = await (date? reservationsService.list(date)
+                         : reservationsService.search(mobile_number));
+  console.log("data: ",data);
   res.json({ data });
 }
 

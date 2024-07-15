@@ -48,6 +48,10 @@ function Routes() {
       <Route exact={true} path="/tables/new">
          <TableCreate />
       </Route>
+      
+      <Route exact={true} path="/search">
+          <Search />
+      </Route>
 
       <Route>
         <NotFound />
