@@ -6,6 +6,7 @@ import ReservationCreate from "../reservations/ReservationCreate";
 import ReservationSeat from "../reservations/ReservationSeat";
 import Dashboard from "../dashboard/Dashboard";
 import TableCreate from "../tables/TableCreate";
+import Search from "../search/Search";
 import NotFound from "./NotFound";
 
 

@@ -33,25 +33,28 @@ describe("US-07 - Search reservations - E2E", () => {
 
   describe("/search page", () => {
     test("entering an existing mobile number and submitting displays the matched records", async () => {
+    console.log("point 1");
       await page.type("input[name=mobile_number]", "808-555-0140");
-
+    console.log("point 2")
       await page.screenshot({
         path: ".screenshots/us-07-search-reservations-submit-valid-before.png",
         fullPage: true,
       });
-
+    console.log("point 3")
       await Promise.all([
         page.click("button[type=submit]"),
         page.waitForResponse((response) =>
           response.url().includes("mobile_number=")
         ),
       ]);
-
+    console.log("point 4")
       await page.screenshot({
         path: ".screenshots/us-07-search-reservations-submit-valid-after.png",
         fullPage: true,
       });
+    console.log("point 5")
       await expect(page).toMatch(/Tiger/);
+    console.log("point 6")
     });
 
     test("entering an non-existent phone number and submitting displays a No reservations found message", async () => {
